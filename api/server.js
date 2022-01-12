@@ -5,6 +5,18 @@ const User = require('./users/model')
 
 server.use(express.json())
 
+server.post('/api/users', async (req, res) => {
+    try {
+      const { name, bio } = req.body
+      console.log(name, bio)
+      const newUser = await User.insert({ name, bio })
+      console.log(newUser)
+      res.status(201).json(newUser)
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  })
+
 server.get('/api/users', async (req, res) => {
     try {
         const users = await User.find()
