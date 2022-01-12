@@ -9,11 +9,16 @@ server.post('/api/users', async (req, res) => {
     try {
       const { name, bio } = req.body
       console.log(name, bio)
-      const newUser = await User.insert({ name, bio })
-      console.log(newUser)
-      res.status(201).json(newUser)
+      if (!name || !bio) {
+          res.status(400).json({ message: "Please provide name and bio for the user" })
+      }
+      else {
+        const newUser = await User.insert({ name, bio })
+        console.log(newUser)
+        res.status(201).json(newUser)
+      }
     } catch (err) {
-      res.status(500).json({ message: err.message })
+      res.status(500).json({ message: "There was an error while saving the user to the database" })
     }
   })
 
@@ -53,7 +58,7 @@ server.delete('/api/users/:id', async (req, res) => {
     }
   })
 
-  server.put('/api/users/:id', async (req, res) => {
+server.put('/api/users/:id', async (req, res) => {
     const { id } = req.params
     const { name, bio } = req.body
     console.log(id, name, bio)
